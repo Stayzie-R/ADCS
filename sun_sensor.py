@@ -42,7 +42,7 @@ class SunSensor:
                 self.read_sensors_value()
                 self.calc_light_vector()
 
-                if config.sun_sensor["PRINT_RESULT"]:  # Print data in console
+                if config.sun_sensor["PRINT_RESULT"]:
                     self.print_sensors_value()
                     self.print_light_vector()
 
