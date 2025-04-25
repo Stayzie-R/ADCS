@@ -108,7 +108,7 @@ class SunSensor:
         Print the values of all sensors.
         """
         for sensor in self.photoresistors:
-            print(sensor.name,"_",sensor.color,": ",sensor.value_raw)
+            print(sensor.name,"_",sensor.color,": ", sensor.get_norm_value())
 
     def print_light_vector(self):
         """
