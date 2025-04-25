@@ -52,15 +52,18 @@ class SunSensor:
 
                 if self.read_interval is not None:
                     time.sleep(self.read_interval)
+
         except KeyboardInterrupt:
-            print("\nProgram terminated by user.")
+            if config.plot_app["PRINT_PLOT_APP"]:
+                response = requests.post(config.plot_app["REMOVE_VECTOR"],headers=config.plot_app['API_KEY'])
+                print("\nProgram terminated by user.")
 
     def read_sensors_value(self):
-        """
-        Read the values from all sensors.
-        """
-        for photoresistor in self.photoresistors:
-            photoresistor.read_sensor_value()
+            """
+            Read the values from all sensors.
+            """
+            for photoresistor in self.photoresistors:
+                photoresistor.read_sensor_value()
 
     def calc_light_vector(self):
         """
