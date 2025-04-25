@@ -14,7 +14,7 @@ class SunSensor:
     calculating the light vector, and transmitting data to an app.
     """
 
-    def __init__(self, read_interval=config.sun_sensor["READ_INTERVAL"], sensors=config.sun_sensor["SENSORS"]):
+    def __init__(self, read_interval=config.sun_sensor["READ_INTERVAL"], sensors=config.sun_sensor["SENSORS"],stop_event=None):
         """
         Initialize the SunSensor instance.
 
@@ -25,12 +25,15 @@ class SunSensor:
         self.photoresistors = self._initialize_photoresistors(sensors)
         self.read_interval = read_interval
         self.light_vector = None
+        self.stop_event = stop_event
 
     @staticmethod
     def _initialize_photoresistors(sensors):
         photoresistors = []
         for sensor in sensors:
-            pin_key,color,vector = sensor
+            pin_key = sensor["pin_key"]
+            color = sensor["color"]
+            vector = tuple(sensor["vector"])
             photoresistors.append(Photoresistor(pin_key, color,vector))
         return photoresistors
 
@@ -39,7 +42,7 @@ class SunSensor:
         Run APP: reading sensors, calculating light vector, and sending data.
         """
         try:
-            while True:
+            while not (self.stop_event and self.stop_event.is_set()):
                 self.read_sensors_value()
                 self.calc_light_vector()
 
@@ -53,10 +56,15 @@ class SunSensor:
                 if self.read_interval is not None:
                     time.sleep(self.read_interval)
 
-        except KeyboardInterrupt:
+        except Exception as e:
+            print(f"Mistake in SunSensor: {e}")
+        finally:
             if config.plot_app["PRINT_PLOT_APP"]:
-                response = requests.post(config.plot_app["REMOVE_VECTOR"],headers=config.plot_app['API_KEY'])
-                print("\nProgram terminated by user.")
+                try:
+                    requests.post(config.plot_app["REMOVE_VECTOR"], headers=config.plot_app['API_KEY'])
+                except Exception as e:
+                    print(" Cannot remove vector from plot_app:", e)
+            print("SunSensor ended.")
 
     def read_sensors_value(self):
             """

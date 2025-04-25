@@ -16,8 +16,10 @@ class ADCS:
 
         This method initializes the ADCS by setting up the sensors.
         """
+        self.stop_event = threading.Event()
+
         self.sensors = {
-            "sun_sensor": SunSensor()
+            "sun_sensor": SunSensor(stop_event=self.stop_event)
         }
         self.acutators = {
          #   "autators"
@@ -30,12 +32,18 @@ class ADCS:
         This method starts the Attitude Determination System (ADS) and the Attitude
         Control System (ACS) in separate threads.
         """
-        ads_thread = threading.Thread(target=self.attitude_determination_system)
-        ads_thread.start()
+        try:
+            ads_thread = threading.Thread(target=self.attitude_determination_system)
+            ads_thread.start()
 
-        # acs_thread = threading.Thread(target=self.attitude_control_system)
-        # acs_thread.start()
+            # acs_thread = threading.Thread(target=self.attitude_control_system)
+            # acs_thread.start()
 
+            ads_thread.join()
+            #acs_thread.join()
+        except KeyboardInterrupt:
+            print("\nKeyboardInterrupt – ending...")
+            self.stop_event.set()
 
     def attitude_determination_system(self):
         """
@@ -48,7 +56,8 @@ class ADCS:
         for name, sensor in self.sensors.items():
             sensor_threads[name] = threading.Thread(target=sensor.run)
             sensor_threads[name].start()
-
+        for t in sensor_threads.values():
+            t.join()
 
     def attitude_control_system(self):
         """
