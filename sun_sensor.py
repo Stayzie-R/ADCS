@@ -57,7 +57,7 @@ class SunSensor:
                     time.sleep(self.read_interval)
 
         except Exception as e:
-            print(f"Mistake in SunSensor: {e}")
+            print("Mistake in SunSensor: ", e)
         finally:
             if config.plot_app["PRINT_PLOT_APP"]:
                 try:
@@ -108,7 +108,7 @@ class SunSensor:
         Print the values of all sensors.
         """
         for sensor in self.photoresistors:
-            print(f"{sensor.name}_{sensor.color}: {sensor.value_raw}")
+            print(sensor.name,"_",sensor.color,": ",sensor.value_raw)
 
     def print_light_vector(self):
         """

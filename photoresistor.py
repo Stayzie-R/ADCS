@@ -43,13 +43,13 @@ class Photoresistor:
             return normalized_value
 
         except FileNotFoundError:
-            print(f"Error: ADC value_raw file for channel {self.channel} not found at {adc_file}.")
+            print("Error: ADC value_raw file for channel ",{self.channel}," not found at ",adc_file,".")
             return None
         except ValueError:
-            print(f"Error: Invalid value_raw read from ADC file for channel {self.channel} at {adc_file}.")
+            print("Error: Invalid value_raw read from ADC file for channel ",self.channel," at ",adc_file,".")
             return None
         except Exception as e:
-            print(f"Error: Unexpected error while reading ADC value_raw from channel {self.channel}: {e}")
+            print("Error: Unexpected error while reading ADC value_raw from channel ", self.channel,": ",e)
             return None
 
     def read_sensor_value_raw(self):
@@ -67,13 +67,13 @@ class Photoresistor:
             return adc_value
 
         except FileNotFoundError:
-            print(f"Error: ADC value_raw file for channel {self.channel} not found at {adc_file}.")
+            print("Error: ADC value_raw file for channel ", {self.channel}, " not found at ", adc_file, ".")
             return None
         except ValueError:
-            print(f"Error: Invalid value_raw read from ADC file for channel {self.channel} at {adc_file}.")
+            print("Error: Invalid value_raw read from ADC file for channel ", self.channel, " at ", adc_file, ".")
             return None
         except Exception as e:
-            print(f"Error: Unexpected error while reading ADC value_raw from channel {self.channel}: {e}")
+            print("Error: Unexpected error while reading ADC value_raw from channel ", self.channel, ": ", e)
             return None
 
     def get_norm_value(self):
@@ -116,11 +116,11 @@ class PhotoresistorValidator:
                 ValueError: If the channel name is invalid or already in use, or if the vector is already in use.
         """
         if name not in cls._allowed_names:
-            raise ValueError(f"Invalid channel name: {name}")
+            raise ValueError("Invalid channel name: ",name)
         if name in cls._used_channels:
-            raise ValueError(f"Channel {name} is already in use.")
+            raise ValueError("Channel ",name ,"is already in use.")
         if vector in cls._used_vectors:
-            raise ValueError(f"Vector {vector} is already in use.")
+            raise ValueError("Vector ",vector," is already in use.")
 
         cls._used_channels.add(name)
         cls._used_vectors.add(vector)
