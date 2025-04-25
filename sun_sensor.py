@@ -1,5 +1,6 @@
 import config
 import numpy as np
+import requests
 import time
 
 from photoresistor import Photoresistor
@@ -45,6 +46,9 @@ class SunSensor:
                 if config.sun_sensor["PRINT_RESULT"]:
                     self.print_sensors_value()
                     self.print_light_vector()
+
+                if config.plot_app["PRINT_PLOT_APP"]:
+                    self.transmit_vec_to_plot_app()
 
                 if self.read_interval is not None:
                     time.sleep(self.read_interval)
@@ -109,3 +113,14 @@ class SunSensor:
             numpy.ndarray: The light vector.
         """
         return self.light_vector
+
+    def transmit_vec_to_plot_app(self):
+        """
+        Send sensor data to a app for printing.
+        """
+        data = [self.light_vector.tolist(), [sensor.get_norm_value() for sensor in self.photoresistors]]
+        try:
+            response = requests.post(config.plot_app['UPDATE_VECTOR'], json=data, headers=config.plot_app['API_KEY'])
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print("An error occurred while sending the data:", e)

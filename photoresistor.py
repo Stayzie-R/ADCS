@@ -137,3 +137,4 @@ class PhotoresistorValidator:
         """
         cls._used_channels.discard(name)
         cls._used_vectors.discard(vector)
+

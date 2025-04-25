@@ -16,3 +16,10 @@ sun_sensor = dict(
     ]
 )
 
+plot_app = dict(
+    PRINT_PLOT_APP = False,
+    UPDATE_VECTOR = 'https://sun-sensor-plot-app-a79b737de2f5.herokuapp.com/update_vector',
+    REMOVE_VECTOR = 'https://sun-sensor-plot-app-a79b737de2f5.herokuapp.com/remove_vector',
+    API_KEY = {'Authorization': "ADCS"}
+)
+
