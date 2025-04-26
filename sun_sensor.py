@@ -8,12 +8,12 @@ from photoresistor import Photoresistor
 
 class SunSensor:
     """
-    Class representing a sun sensor.
+   Class representing a sun sensor.
 
-    This class handles reading values from photoresistors,
-    calculating the light vector, and transmitting data to an app.
-    """
+   This class handles reading values from photoresistors,
+   calculating the light vector, and transmitting data to an app.
 
+   """
     def __init__(self, read_interval=config.sun_sensor["READ_INTERVAL"], sensors=config.sun_sensor["SENSORS"],stop_event=None):
         """
         Initialize the SunSensor instance.
@@ -21,6 +21,9 @@ class SunSensor:
         Args:
             read_interval (float, optional): Time interval for reading sensors.
                                              Defaults to 1 second.
+            sensors (list, optional): A list of dictionaries representing sensor configurations.
+                                      Defaults to the value from config.sun_sensor["SENSORS"].
+            stop_event (threading.Event, optional): An event to signal when to stop sensor reading. Defaults to None.
         """
         self.photoresistors = self._initialize_photoresistors(sensors)
         self.read_interval = read_interval
@@ -29,6 +32,20 @@ class SunSensor:
 
     @staticmethod
     def _initialize_photoresistors(sensors):
+        """
+        Initialize a list of Photoresistor objects based on the provided sensor data.
+
+        This method takes a list of sensor dictionaries, where each dictionary contains
+        the information required to create a Photoresistor object, such as pin key, color, and vector.
+        It then initializes the Photoresistor objects and appends them to a list.
+
+        Args:
+            sensors (list): A list of dictionaries where each dictionary represents a sensor with keys:
+                             "pin_key", "color", and "vector" (a list or tuple).
+
+        Returns:
+            list: A list of Photoresistor objects initialized with the data from the provided sensor list.
+        """
         photoresistors = []
         for sensor in sensors:
             pin_key = sensor["pin_key"]
@@ -39,8 +56,21 @@ class SunSensor:
 
     def run(self):
         """
-        Run APP: reading sensors, calculating light vector, and sending data.
-        """
+            Run the SunSensor application: read sensor values, calculate the light vector,
+            and transmit data to the plot application.
+
+            Exception Handling:
+                If an error occurs during the reading, calculation, or transmission process,
+                it will be caught and logged.
+
+            Cleanup:
+                After the process ends, an attempt is made to remove the light vector
+                from the plot application, if configured.
+
+            Raises:
+                Exception: Any errors encountered during the execution will be caught
+                           and printed.
+            """
         try:
             while not (self.stop_event and self.stop_event.is_set()):
                 self.read_sensors_value()
@@ -127,7 +157,16 @@ class SunSensor:
 
     def transmit_vec_to_plot_app(self):
         """
-        Send full sensor data to a plot app.
+        This method formats the sensor data, including the light vector and sensor values,
+        into a JSON structure and sends it via a POST request to the plot application
+        specified in the configuration.
+
+        If the request is successful, the plot app is updated with the new data. If there is
+        any error during the request (e.g., connection issues, API errors), an exception is caught
+        and logged.
+
+        Raises:
+            requests.exceptions.RequestException: If an error occurs during the request, the exception is caught and logged.
         """
         data = {
             "light_vector": self.light_vector.tolist() if self.light_vector is not None else None,
