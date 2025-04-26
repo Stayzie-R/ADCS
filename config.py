@@ -1,8 +1,23 @@
+"""
+config.py
+
+This file contains configuration settings for the Sun Sensor application.
+It includes the configuration for photoresistors, sun sensor read intervals,
+and settings for the plot app integration.
+
+Attributes:
+    photoresistor (dict): Configuration for photoresistor names and paths.
+    sun_sensor (dict): Configuration for sun sensor read intervals, result printing, and sensor list.
+    plot_app (dict): Configuration for plot app settings, including API endpoint and authorization key.
+"""
+
+# Configuration for photoresistors
 photoresistor = dict(
     ALLOWED_NAMES = ["AIN0", "AIN1", "AIN2", "AIN3", "AIN4", "AIN5", "AIN6"],
     BBB_IIO_DEVICE_PATH =  "/sys/bus/iio/devices/iio:device0/in_voltage{channel}_raw",
 )
 
+# Configuration for the Sun Sensor application
 sun_sensor = dict(
     READ_INTERVAL = 1,
     PRINT_RESULT = True,
@@ -16,10 +31,11 @@ sun_sensor = dict(
     ]
 )
 
+# Configuration for the Plot App integration
 plot_app = dict(
-    PRINT_PLOT_APP = False,
-    UPDATE_VECTOR = 'https://sun-sensor-plot-app-a79b737de2f5.herokuapp.com/update_vector',
-    REMOVE_VECTOR = 'https://sun-sensor-plot-app-a79b737de2f5.herokuapp.com/remove_vector',
-    API_KEY = {'Authorization': "ADCS"}
+    PRINT_PLOT_APP = False,                                         # Whether to send data to the plot app
+    UPDATE_VECTOR = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/update_vector',
+    REMOVE_VECTOR = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/remove_vector',
+    API_KEY = {'Authorization': "ADCS"}                             # API key for authentication
 )
 
