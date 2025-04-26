@@ -127,11 +127,26 @@ class SunSensor:
 
     def transmit_vec_to_plot_app(self):
         """
-        Send sensor data to a app for printing.
+        Send full sensor data to a plot app.
         """
-        data = [self.light_vector.tolist(), [sensor.get_norm_value() for sensor in self.photoresistors]]
+        data = {
+            "light_vector": self.light_vector.tolist() if self.light_vector is not None else None,
+            "sensors": [
+                {
+                    "color": sensor.color,
+                    "vector": sensor.vector,
+                    "value": sensor.get_norm_value()
+                }
+                for sensor in self.photoresistors
+            ]
+        }
         try:
-            response = requests.post(config.plot_app['UPDATE_VECTOR'], json=data, headers=config.plot_app['API_KEY'])
+            response = requests.post(
+                config.plot_app['UPDATE_VECTOR'],
+                json=data,
+                headers=config.plot_app['API_KEY']
+            )
             response.raise_for_status()
+
         except requests.exceptions.RequestException as e:
             print("An error occurred while sending the data:", e)
