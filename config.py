@@ -35,7 +35,6 @@ sun_sensor = dict(
 plot_app = dict(
     PRINT_PLOT_APP = True,                                         # Whether to send data to the plot app
     UPDATE_VECTOR = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/update_vector',
-    REMOVE_VECTOR = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/remove_vector',
     API_KEY = {'Authorization': "ADCS"}                             # API key for authentication
 )
 

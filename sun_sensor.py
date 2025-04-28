@@ -91,7 +91,8 @@ class SunSensor:
         finally:
             if config.plot_app["PRINT_PLOT_APP"]:
                 try:
-                    requests.post(config.plot_app["REMOVE_VECTOR"], headers=config.plot_app['API_KEY'])
+                    self.light_vector = (0, 0, 0)
+                    self.transmit_vec_to_plot_app()
                 except Exception as e:
                     print(" Cannot remove vector from plot_app:", e)
             print("SunSensor ended.")
