@@ -91,8 +91,7 @@ class SunSensor:
         finally:
             if config.plot_app["PRINT_PLOT_APP"]:
                 try:
-                    self.light_vector = (0, 0, 0)
-                    self.transmit_vec_to_plot_app()
+                    self.transmit_vec_to_plot_app(shutdown=True)
                 except Exception as e:
                     print(" Cannot remove vector from plot_app:", e)
             print("SunSensor ended.")
@@ -156,7 +155,7 @@ class SunSensor:
         """
         return self.light_vector
 
-    def transmit_vec_to_plot_app(self):
+    def transmit_vec_to_plot_app(self, shutdown=False):
         """
         This method formats the sensor data, including the light vector and sensor values,
         into a JSON structure and sends it via a POST request to the plot application
@@ -169,17 +168,31 @@ class SunSensor:
         Raises:
             requests.exceptions.RequestException: If an error occurs during the request, the exception is caught and logged.
         """
-        data = {
-            "light_vector": self.light_vector.tolist() if self.light_vector is not None else None,
-            "sensors": [
-                {
-                    "color": sensor.color,
-                    "vector": sensor.vector,
-                    "value": sensor.get_norm_value()
-                }
-                for sensor in self.photoresistors
-            ]
-        }
+        if shutdown:
+            data = {
+                "light_vector": [0,0,0],
+                "sensors": [
+                    {
+                        "color": sensor.color,
+                        "vector": sensor.vector,
+                        "value": 0
+                    }
+                    for sensor in self.photoresistors
+                ]
+            }
+        else:
+            data = {
+                "light_vector": self.light_vector.tolist() if self.light_vector is not None else None,
+                "sensors": [
+                    {
+                        "color": sensor.color,
+                        "vector": sensor.vector,
+                        "value": sensor.get_norm_value()
+                    }
+                    for sensor in self.photoresistors
+                ]
+            }
+
         try:
             response = requests.post(
                 config.plot_app['UPDATE_VECTOR'],
