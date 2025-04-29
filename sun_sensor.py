@@ -170,12 +170,12 @@ class SunSensor:
         """
         if shutdown:
             data = {
-                "light_vector": [0,0,0],
+                "light_vector": [0.0,0.0,0.0],
                 "sensors": [
                     {
                         "color": sensor.color,
                         "vector": sensor.vector,
-                        "value": 0
+                        "value": 0.0
                     }
                     for sensor in self.photoresistors
                 ]
