@@ -24,69 +24,70 @@ A Docker container based on Ubuntu 20.04 was used to build the Linux4Space distr
 
 ## Running the Image on BeagleBone Black Wireless
 
-**1. Download the [Image]()** 
+#### **1. Download the [Image]()** 
 
-**2. Flash to SD Card**
+#### *2. Flash to SD Card**
 
 Format the microSD card as FAT32 with an MBR partition table, then use a tool like balenaEtcher to flash the downloaded `l4s-adcs-image-beaglebone.rootfs.wic.xz` file directly onto a microSD card. This card will be used to boot the BBB.
 
-**3. Boot from SD**
+#### **3. Boot from SD**
 
 Insert the SD card into the BBB. While plugging in the power, hold the BOOT button for ~5 seconds to boot from the card instead of internal memory. The new system should start automatically.
 
-**4. Flash to Internal eMMC (Optional)**
+#### **4. Flash to Internal eMMC (Optional)**
 
 To permanently install the system to internal storage:
 
-<blockquote>
-> **4.1 Decompress the image**  
-> Run the following command to decompress the `.wic.xz` file:
-> ```bash
-> xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
-> ```
+**4.1 Decompress the image**  
+Run the following command to decompress the `.wic.xz` file: 
+```bash
+xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
+```
 
-> **4.2 Copy the `.wic` file**  
-> Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
+**4.2 Copy the `.wic` file**  
+Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
 
-> **4.3 Check the connected devices**  
-> Run `blkid` to list the connected devices:
-> ```bash
-> blkid
-> ```
+**4.3 Check the connected devices**  
+Run `blkid` to list the connected devices:
+```bash
+blkid
+```
 
-> **4.4 Mount the device on BBB**  
-> Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
-> ```bash
-> mkdir /mnt/sd
-> mount /dev/sda1 /mnt/sd
-> ```
+**4.4 Mount the device on BBB**  
+Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
+```bash
+mkdir /mnt/sd
+mount /dev/sda1 /mnt/sd
+```
 
-> **4.5 Write the image to eMMC**  
-> Use `dd` to write the image to eMMC:
-> ```bash
-> dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
-> ```
+**4.5 Write the image to eMMC**  
+Use `dd` to write the image to eMMC:
+```bash
+dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
+```
 
-> **4.6 Update the bootloader configuration**
-> - Create a mount point and mount the boot partition:
->     ```bash
->     mkdir /mnt/boot
->     mount /dev/mmcblk1p1 /mnt/boot
->     ```
-> - Edit the `extlinux.conf` file:
->     ```bash
->     nano /mnt/boot/extlinux/extlinux.conf
->     ```
-> - Set the `APPEND` line to:
->     ```bash
->     APPEND root=/dev/mmcblk1p2 rootwait rw ...
->    ```
+**4.6 Update the bootloader configuration**
+- Create a mount point and mount the boot partition: 
+```bash
+   mkdir /mnt/boot
+   mount /dev/mmcblk1p1 /mnt/boot
+```
 
-> **4.7 Shutdown the device**  
-> Shutdown the device and **remove all microSD cards**.
+- Edit the `extlinux.conf` file: 
+```bash
+   nano /mnt/boot/extlinux/extlinux.conf
+   ```
+
+- Set the `APPEND` line to: 
+```bash
+   APPEND root=/dev/mmcblk1p2 rootwait rw ...
+  ```
+
+**4.7 Shutdown the device**  
+Shutdown the device and **remove all microSD cards**.
 
 
 
 
-</blockquote> 
+
 
