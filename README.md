@@ -17,6 +17,7 @@ ADCS/
 ```
 
 ## Hardware Setup
+### Cube Sensor Module
 The sensing unit is a custom 3D-printed cube designed to house five photoresistors, each mounted on a separate square PCB and positioned on an exposed face of the cube. This layout allows the system to capture light intensity from multiple directions.
 <p align="center">
   <img src="docs/hardware1.png" alt="Cube Sensor Front View" width="30%">
@@ -31,6 +32,23 @@ A sixth PCB, located at the bottom of the cube, serves as a central hub for powe
   <img src="docs/PCB.png" alt="PCB Connection" width="50%">
 </p>
 
+### Pin Connections to BeagleBone Black
+Each photoresistor is connected to the analog inputs of the BeagleBone Black. Specifically, the following pins were used:
+
+<div align="center">
+|     Label     | BBB Header Pin |  Color  |     Vector     |   Function   |
+|:-------------:|:--------------:|:-------:|:--------------:|:------------:|
+| AIN0          |     P9_39      | Orange  |   (0, 0, 1)    |    Vector    |
+| AIN1          |     P9_40      | White   |   (1, 0, 0)    |    Vector    |
+| AIN2          |     P9_37      | Green   |  (0, -1, 0)    |    Vector    |
+| AIN3          |     P9_38      | Yellow  |   (0, 1, 0)    |    Vector    |
+| AIN4          |     P9_36      | Brown   |  (-1, 0, 0)    |    Vector    |
+| **VDD_ADC**   |     P9_32      | Blue    |     ———        |    Power (1.8 V)     |
+| **GND_ADC**   |     P9_34      | Red     |     ———        |    Ground    |
+
+</div>
+
+A sixth PCB at the bottom of the cube centralizes power and ground distribution. The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
 
 ## Light Vector Calculation
 The light vector L is calculated using the difference in light intensity between opposing photoresistors aligned with each axis. If I+ is the intensity from the sensor in the positive direction of an axis, and I- is from the negative:
