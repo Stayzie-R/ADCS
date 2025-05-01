@@ -5,8 +5,7 @@ This guide outlines the steps to integrate the ADCS application into the [Linux4
 The Linux4Space distribution used for this integration can be found [here](https://gitlab.com/linux4space/BBW-ADCS) for reference.
 ---
 ## ADCS Application Integration
-The ADCS application was integrated into the Linux4Space distribution using a custom recipe. You can find the recipe for ADCS [here](/L4S_yocto_files/adcs/adcs_1.0.bb)
-
+The ADCS application was integrated into the Linux4Space distribution using a custom recipe. You can find the recipe for ADCS [here](/L4S_yocto_files/adcs/adcs_1.0.bb).
 Once the distribution is built, the ADCS application will be included in the image, and it can be run directly on the target device.
 ---
 ## Wi-Fi Auto-Connect Script Integration
