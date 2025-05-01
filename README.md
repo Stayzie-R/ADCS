@@ -35,7 +35,7 @@ A sixth PCB, located at the bottom of the cube, serves as a central hub for powe
 ### Pin Connections to BeagleBone Black
 Each photoresistor is connected to the analog inputs of the BeagleBone Black. Specifically, the following pins were used:
 
-<table style="margin-left:auto; margin-right:auto; text-align:center;">
+<table align="center" style="margin-left: auto; margin-right: auto; text-align: center;">
   <thead>
     <tr>
       <th>Label</th>
