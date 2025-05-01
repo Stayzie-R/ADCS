@@ -71,17 +71,14 @@ To permanently install the system to internal storage:
 >     mkdir /mnt/boot
 >     mount /dev/mmcblk1p1 /mnt/boot
 >     ```
-
 > - Edit the `extlinux.conf` file:
 >     ```bash
 >     nano /mnt/boot/extlinux/extlinux.conf
 >     ```
-
 > - Set the `APPEND` line to:
 >     ```bash
 >     APPEND root=/dev/mmcblk1p2 rootwait rw ...
 >    ```
-
 > **4.7 Shutdown the device**  
 > Shutdown the device and **remove all microSD cards**.
 
