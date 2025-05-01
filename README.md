@@ -35,8 +35,8 @@ A sixth PCB, located at the bottom of the cube, serves as a central hub for powe
 ### Pin Connections to BeagleBone Black
 Each photoresistor is connected to the analog inputs of the BeagleBone Black. Specifically, the following pins were used:
 
-<div align="center">
-<!-- Markdown table inside HTML block -->
+<center>
+
 |     Label     | BBB Header Pin |  Color  |     Vector     |   Function   |
 |:-------------:|:--------------:|:-------:|:--------------:|:------------:|
 | AIN0          |     P9_39      | Orange  |   (0, 0, 1)    |    Vector    |
@@ -47,7 +47,7 @@ Each photoresistor is connected to the analog inputs of the BeagleBone Black. Sp
 | **VDD_ADC**   |     P9_32      | Blue    |     ———        |    Power (1.8 V)     |
 | **GND_ADC**   |     P9_34      | Red     |     ———        |    Ground    |
 
-</div>
+</center>
 
 A sixth PCB at the bottom of the cube centralizes power and ground distribution. The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
 
