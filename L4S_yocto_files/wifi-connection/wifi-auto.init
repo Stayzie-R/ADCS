@@ -1,0 +1,28 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          wifi-auto
+# Required-Start:    $network
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: WiFi auto-connect script
+### END INIT INFO
+
+case "$1" in
+  start)
+    echo "Starting wifi-auto..."
+    /usr/bin/wifi-auto
+    ;;
+  stop)
+    echo "Stopping wifi-auto (not implemented)"
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
