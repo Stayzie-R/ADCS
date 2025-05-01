@@ -50,7 +50,7 @@ Each photoresistor is connected to the analog inputs of the BeagleBone Black. Sp
 
 </div>
 
-A sixth PCB at the bottom of the cube centralizes power and ground distribution. The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
+The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
 
 ## Light Vector Calculation
 The light vector L is calculated using the difference in light intensity between opposing photoresistors aligned with each axis. If I+ is the intensity from the sensor in the positive direction of an axis, and I- is from the negative:
