@@ -18,7 +18,6 @@ ADCS/
 
 ## Hardware Setup
 The sensing unit is a custom 3D-printed cube designed to house five photoresistors, each mounted on a separate square PCB and positioned on an exposed face of the cube. This layout allows the system to capture light intensity from multiple directions.
-![PCB connection](docs/PCB.png)
 <p align="center">
   <img src="docs/hardware1.png" alt="Cube Sensor Front View" width="30%">
   <img src="docs/hardware2.png" alt="Cube Sensor Angled View" width="30%">
@@ -28,6 +27,9 @@ Each sensor is aligned with one of the primary axes in 3D space (x, y, or z), en
 
 A sixth PCB, located at the bottom of the cube, serves as a central hub for power and ground distribution. The structure is elevated on a base with legs to allow cable routing from underneath. To aid orientation during testing, each sensor face is uniquely color-coded.
 
+<p align="center">
+  <img src="docs/PCB.png" alt="PCB Connection" width="50%">
+</p>
 
 
 ## Light Vector Calculation
