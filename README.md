@@ -24,7 +24,7 @@ The sensing unit is a custom 3D-printed cube designed to house five photoresisto
   <img src="docs/hardware3.png" alt="Cube Sensor Back View" width="30%">
 </p>
 Each sensor is aligned with one of the primary axes in 3D space (x, y, or z), enabling vector-based estimation of the light’s direction. The PCBs are cut from double-sided fiberglass prototyping boards and mounted flush into the structure for uniform and stable placement.
-
+<br><br>
 A sixth PCB, located at the bottom of the cube, serves as a central hub for power and ground distribution. The structure is elevated on a base with legs to allow cable routing from underneath. To aid orientation during testing, each sensor face is uniquely color-coded.
 
 <p align="center">
