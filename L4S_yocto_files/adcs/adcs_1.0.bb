@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/Proprietary;md5=0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"
 
 SRC_URI = "git://github.com/Stayzie-R/ADCS.git;protocol=https;branch=main"
-SRCREV = "9bc596c7f83f344a03005f1502f36e0da02979b1"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
