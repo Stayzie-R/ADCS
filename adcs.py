@@ -1,6 +1,9 @@
 import threading
 from sun_sensor import SunSensor
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ADCS:
     """
@@ -21,8 +24,8 @@ class ADCS:
         self.sensors = {
             "sun_sensor": SunSensor(stop_event=self.stop_event)
         }
-        self.acutators = {
-         #   "autators"
+        self.actuators = {
+            # TODO: Add actuators (e.g., reaction wheels, magnetorquers)
         }
 
     def run(self):
@@ -52,10 +55,18 @@ class ADCS:
         This method runs the Attitude Determination System (ADS) which collects data
         from sensors to determine the orientation of the satellite.
         """
-        sensor_threads = dict()
+
+        def safe_run(sensor_name, sensor):
+            try:
+                sensor.run()
+            except Exception as e:
+                print(f"[ERROR] Sensor '{sensor_name}' failed: {e}")
+
+        sensor_threads = {}
         for name, sensor in self.sensors.items():
-            sensor_threads[name] = threading.Thread(target=sensor.run)
+            sensor_threads[name] = threading.Thread(target=safe_run, args=(name, sensor))
             sensor_threads[name].start()
+
         for t in sensor_threads.values():
             t.join()
 
@@ -70,5 +81,8 @@ class ADCS:
         pass
 
 if __name__ == "__main__":
-    app = ADCS()
-    app.run()
+    try:
+        app = ADCS()
+        app.run()
+    except Exception as e:
+        print(f"[FATAL ERROR] ADCS failed: {e}")

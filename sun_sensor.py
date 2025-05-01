@@ -4,7 +4,9 @@ import requests
 import time
 
 from photoresistor import Photoresistor
+import logging
 
+logger = logging.getLogger(__name__)
 
 class SunSensor:
     """
@@ -72,7 +74,7 @@ class SunSensor:
                            and printed.
             """
         try:
-            while not (self.stop_event and self.stop_event.is_set()):
+            while self.stop_event is None or not self.stop_event.is_set():
                 self.read_sensors_value()
                 self.calc_light_vector()
 
@@ -87,14 +89,14 @@ class SunSensor:
                     time.sleep(self.read_interval)
 
         except Exception as e:
-            print("Mistake in SunSensor: ", e)
+            logger.error("SunSensor runtime error: %s", e)
         finally:
             if config.plot_app["PRINT_PLOT_APP"]:
                 try:
                     self.transmit_vec_to_plot_app(shutdown=True)
                 except Exception as e:
-                    print(" Cannot remove vector from plot_app:", e)
-            print("SunSensor ended.")
+                    logger.warning("Failed to remove vector from plot_app: %s", e)
+            logger.info("SunSensor has ended.")
 
     def read_sensors_value(self):
             """
@@ -115,6 +117,7 @@ class SunSensor:
 
         max_value = max(sensor.value_raw for sensor in self.photoresistors)
         if max_value == 0:
+            logger.warning("Cannot calculate light vector: all sensor values are 0.")
             raise ValueError("Cannot calculate light vector: all sensor values are 0.")
 
         for i, vector in enumerate(T_matrix):
@@ -169,6 +172,10 @@ class SunSensor:
             requests.exceptions.RequestException: If an error occurs during the request, the exception is caught and logged.
         """
         if shutdown:
+            self.light_vector = np.array([0.0, 0.0, 0.0])
+            for sensor in self.photoresistors:
+                sensor.value_raw = 0.0
+
             data = {
                 "light_vector": [0.0,0.0,0.0],
                 "sensors": [
@@ -192,14 +199,15 @@ class SunSensor:
                     for sensor in self.photoresistors
                 ]
             }
+        logger.info("Sending light vector: %s", data['light_vector'])
 
         try:
             response = requests.post(
-                config.plot_app['UPDATE_VECTOR'],
+                config.plot_app['UPDATE_VECTOR_URL'],
                 json=data,
                 headers=config.plot_app['API_KEY']
             )
             response.raise_for_status()
-
+            logger.info("Light vector successfully sent to plot app.")
         except requests.exceptions.RequestException as e:
-            print("An error occurred while sending the data:", e)
+            logger.error("An error occurred while sending data: %s", e)

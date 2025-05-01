@@ -10,6 +10,7 @@ Attributes:
     sun_sensor (dict): Configuration for sun sensor read intervals, result printing, and sensor list.
     plot_app (dict): Configuration for plot app settings, including API endpoint and authorization key.
 """
+import logging
 
 # Configuration for photoresistors
 photoresistor = dict(
@@ -20,7 +21,7 @@ photoresistor = dict(
 # Configuration for the Sun Sensor application
 sun_sensor = dict(
     READ_INTERVAL = 1,
-    PRINT_RESULT = True,
+    PRINT_RESULT = False,
     SENSORS = [
 
         dict(pin_key="AIN0", color="orange", vector=(0, 0, 1)),
@@ -34,7 +35,11 @@ sun_sensor = dict(
 # Configuration for the Plot App integration
 plot_app = dict(
     PRINT_PLOT_APP = True,                                         # Whether to send data to the plot app
-    UPDATE_VECTOR = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/update_vector',
+    UPDATE_VECTOR_URL = 'https://adcs-plot-app-5522ec11eb30.herokuapp.com/update_vector',
     API_KEY = {'Authorization': "ADCS"}                             # API key for authentication
 )
 
+logging.basicConfig(
+    level=logging.INFO,  # nebo DEBUG, pokud ladíš
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)

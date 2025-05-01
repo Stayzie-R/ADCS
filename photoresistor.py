@@ -1,4 +1,8 @@
 import config
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class Photoresistor:
     def __init__(self, name, color, vector):
@@ -29,9 +33,9 @@ class Photoresistor:
 
     def read_sensor_value(self):
         """
-       Reads the sensor value_raw from the corresponding IIO file.
+        Reads the sensor value_raw from the corresponding IIO file.
 
-       Returns:
+        Returns:
            float: The normalized sensor value_raw (0.0 to 1.0), or None if an error occurred.
         """
         adc_file = config.photoresistor["BBB_IIO_DEVICE_PATH"].format(channel=self.channel)
@@ -42,14 +46,15 @@ class Photoresistor:
             normalized_value = adc_value / 4095.0  # Normalize to a 0-1 range
             return normalized_value
 
+
         except FileNotFoundError:
-            print("Error: ADC value_raw file for channel ",{self.channel}," not found at ",adc_file,".")
+            logger.error("ADC value file not found for channel %s at %s", self.channel, adc_file)
             return None
         except ValueError:
-            print("Error: Invalid value_raw read from ADC file for channel ",self.channel," at ",adc_file,".")
+            logger.error("Invalid value read from ADC file for channel %s at %s", self.channel, adc_file)
             return None
         except Exception as e:
-            print("Error: Unexpected error while reading ADC value_raw from channel ", self.channel,": ",e)
+            logger.error("Unexpected error while reading ADC value from channel %s: %s", self.channel, e)
             return None
 
     def read_sensor_value_raw(self):
@@ -67,13 +72,13 @@ class Photoresistor:
             return adc_value
 
         except FileNotFoundError:
-            print("Error: ADC value_raw file for channel ", {self.channel}, " not found at ", adc_file, ".")
+            logger.error("ADC value file not found for channel %s at %s", self.channel, adc_file)
             return None
         except ValueError:
-            print("Error: Invalid value_raw read from ADC file for channel ", self.channel, " at ", adc_file, ".")
+            logger.error("Invalid value read from ADC file for channel %s at %s", self.channel, adc_file)
             return None
         except Exception as e:
-            print("Error: Unexpected error while reading ADC value_raw from channel ", self.channel, ": ", e)
+            logger.error("Unexpected error while reading ADC value from channel %s: %s", self.channel, e)
             return None
 
     def get_norm_value(self):
@@ -116,11 +121,11 @@ class PhotoresistorValidator:
                 ValueError: If the channel name is invalid or already in use, or if the vector is already in use.
         """
         if name not in cls._allowed_names:
-            raise ValueError("Invalid channel name: ",name)
+            raise ValueError(f"Invalid channel name: {name}")
         if name in cls._used_channels:
-            raise ValueError("Channel ",name ,"is already in use.")
+            raise ValueError(f"Channel {name} is already in use.")
         if vector in cls._used_vectors:
-            raise ValueError("Vector ",vector," is already in use.")
+            raise ValueError(f"Vector {vector} is already in use.")
 
         cls._used_channels.add(name)
         cls._used_vectors.add(vector)
