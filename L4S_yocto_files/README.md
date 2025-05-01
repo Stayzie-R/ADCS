@@ -3,12 +3,12 @@
 This guide outlines the steps to integrate the ADCS application into the [Linux4Space](https://linux4space.org) distribution and deploy it on the BeagleBone Black Wireless (BBB) board.
 
 The Linux4Space distribution used for this integration can be found [here](https://gitlab.com/linux4space/BBW-ADCS) for reference.
-
+---
 ## ADCS Application Integration
 The ADCS application was integrated into the Linux4Space distribution using a custom recipe. You can find the recipe for ADCS [here](/L4S_yocto_files/adcs/adcs_1.0.bb)
 
 Once the distribution is built, the ADCS application will be included in the image, and it can be run directly on the target device.
-
+---
 ## Wi-Fi Auto-Connect Script Integration
 In addition, a Wi-Fi auto-connect script was added to automatically connect the device to Wi-Fi using predefined credentials. The necessary files for Wi-Fi configuration are located in the  [directory](/L4S_yocto_files/wifi-connection):
 
@@ -16,12 +16,12 @@ In addition, a Wi-Fi auto-connect script was added to automatically connect the 
 - `wifi-auto.init`: A standard init script to start/stop the Wi-Fi auto-connect process.
 - `wifi-config`: The configuration file containing the Wi-Fi SSID and PSK.
 - `wifi-auto_1.0.bb`: The Yocto recipe for integrating the Wi-Fi files to L4S.
-
+---
 ## Docker-Based Yocto Build Environment
 A Docker container based on Ubuntu 20.04 was used to build the Linux4Space distribution to ensure consistency and avoid host-related issues. The setup is defined in the [Dockerfile](/L4S_yocto_files/Dockerfile), which installs all required dependencies and prepares the environment for Yocto builds.
 
 
-
+---
 ## Running the Image on BeagleBone Black Wireless
 
 **1. Download the [Image]()** 
