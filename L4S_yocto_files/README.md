@@ -38,55 +38,55 @@ Insert the SD card into the BBB. While plugging in the power, hold the BOOT butt
 
 To permanently install the system to internal storage:
 
-<div style="margin-left: 30px;">
+<blockquote>
+> **4.1 Decompress the image**  
+> Run the following command to decompress the `.wic.xz` file:
+> ```bash
+> xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
+> ```
 
-  <h3>4.1 Decompress the image</h3>
-  <p>Run the following command to decompress the <code>.wic.xz</code> file:</p>
-  <pre><code>xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
-  </code></pre>
+> **4.2 Copy the `.wic` file**  
+> Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
 
-  <h3>4.2 Copy the <code>.wic</code> file</h3>
-  <p>Copy the decompressed <code>.wic</code> file to a second SD card (or USB drive) connected via a <strong>USB hub</strong>.</p>
+> **4.3 Check the connected devices**  
+> Run `blkid` to list the connected devices:
+> ```bash
+> blkid
+> ```
 
-  <h3>4.3 Check the connected devices</h3>
-  <p>Run <code>blkid</code> to list the connected devices:</p>
-  <pre><code>blkid
-  </code></pre>
+> **4.4 Mount the device on BBB**  
+> Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
+> ```bash
+> mkdir /mnt/sd
+> mount /dev/sda1 /mnt/sd
+> ```
 
-  <h3>4.4 Mount the device on BBB</h3>
-  <p>Mount the device that contains the <code>.wic</code> image. Note that <code>/dev/sda1</code> might vary based on the output of <code>blkid</code>:</p>
-  <pre><code>mkdir /mnt/sd
-mount /dev/sda1 /mnt/sd
-  </code></pre>
+> **4.5 Write the image to eMMC**  
+> Use `dd` to write the image to eMMC:
+> ```bash
+> dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
+> ```
 
-  <h3>4.5 Write the image to eMMC</h3>
-  <p>Use <code>dd</code> to write the image to eMMC:</p>
-  <pre><code>dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
-  </code></pre>
+> **4.6 Update the bootloader configuration**
+> - Create a mount point and mount the boot partition:
+>     ```bash
+>     mkdir /mnt/boot
+>     mount /dev/mmcblk1p1 /mnt/boot
+>     ```
+> - Edit the `extlinux.conf` file:
+>     ```bash
+>     nano /mnt/boot/extlinux/extlinux.conf
+>     ```
+> - Set the `APPEND` line to:
+>     ```bash
+>     APPEND root=/dev/mmcblk1p2 rootwait rw ...
+>    ```
 
-  <h3>4.6 Update the bootloader configuration</h3>
-  <ul>
-    <li>Create a mount point and mount the boot partition:
-      <pre><code>mkdir /mnt/boot
-mount /dev/mmcblk1p1 /mnt/boot
-      </code></pre>
-    </li>
-    <li>Edit the <code>extlinux.conf</code> file:
-      <pre><code>nano /mnt/boot/extlinux/extlinux.conf
-      </code></pre>
-    </li>
-    <li>Set the <code>APPEND</code> line to:
-      <pre><code>APPEND root=/dev/mmcblk1p2 rootwait rw ...
-      </code></pre>
-    </li>
-  </ul>
-
-  <h3>4.7 Shutdown the device</h3>
-  <p>Shutdown the device and <strong>remove all microSD cards</strong>.</p>
-
-</div>
-
+> **4.7 Shutdown the device**  
+> Shutdown the device and **remove all microSD cards**.
 
 
 
+
+</blockquote> 
 
