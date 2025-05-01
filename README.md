@@ -79,6 +79,13 @@ cd ADCS</code></pre>
   </ol>
 </div>
 
+
+### Option 2: Deployment for Linux4Space Distribution 
+For a more integrated deployment, the **ADCS** application can also be integrated into a Yocto Linux build for the Linux4Space distribution (L4S). 
+The full process for incorporating the ADCS application into the L4S Yocto build is outlined in the [README located in the `L4S_yocto_build` folder](L4S_yocto_build/README.md).
+
+
+
 ## Light Vector Calculation
 The light vector L is calculated using the difference in light intensity between opposing photoresistors aligned with each axis. If I+ is the intensity from the sensor in the positive direction of an axis, and I- is from the negative:
 
