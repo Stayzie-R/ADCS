@@ -36,8 +36,6 @@ A sixth PCB, located at the bottom of the cube, serves as a central hub for powe
 Each photoresistor is connected to the analog inputs of the BeagleBone Black. Specifically, the following pins were used:
 
 <div align="center">
-<!-- Markdown table inside HTML block -->
-
 |     Label     | BBB Header Pin |  Color  |     Vector     |   Function   |
 |:-------------:|:--------------:|:-------:|:--------------:|:------------:|
 | AIN0          |     P9_39      | Orange  |   (0, 0, 1)    |    Vector    |
@@ -50,7 +48,29 @@ Each photoresistor is connected to the analog inputs of the BeagleBone Black. Sp
 
 </div>
 
-The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
+A sixth PCB at the bottom of the cube centralizes power and ground distribution. The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
+
+## Running the ADCS Application
+### Option 1: Manual Deployment (Recommended for Prototyping)
+The **ADCS** application can be run independently on the BeagleBone Black Wireless (BBB), making it suitable for testing and development without requiring full integration into a Yocto Linux build.
+
+This lightweight approach is ideal for experimenting with sensor behavior, testing algorithms, or extending the application with new components.
+
+<div style="margin-left: 40px;">
+1. Clone the repository to the BBB:
+```
+git clone https://github.com/Stayzie-R/ADCS.git
+cd ADCS
+```
+2. Install dependencies (if any):
+```
+pip3 install -r requirements.txt
+```
+3. Run the main application:
+```
+python3 adcs.py
+```
+</div>
 
 ## Light Vector Calculation
 The light vector L is calculated using the difference in light intensity between opposing photoresistors aligned with each axis. If I+ is the intensity from the sensor in the positive direction of an axis, and I- is from the negative:
