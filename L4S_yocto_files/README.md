@@ -9,6 +9,14 @@ The Linux4Space distribution used for this integration can be found [here](https
 The ADCS application was integrated into the Linux4Space distribution using a custom recipe. You can find the recipe for ADCS [here](/L4S_yocto_files/adcs/adcs_1.0.bb).
 Once the distribution is built, the ADCS application will be included in the image, and it can be run directly on the target device.
 
+As part of the integration, the ADCS application was added to the Yocto build system through a dedicated layer called `meta-linux4space-adcs`. This layer follows the standard Yocto directory structure, ensuring proper discoverability and integration during the build process:
+```
+meta-linux4space-adcs
+└── recipes-adcs
+    └── adcs
+        └── adcs_1.0.bb
+```
+
 ## Wi-Fi Auto-Connect Script Integration
 In addition, a Wi-Fi auto-connect script was added to automatically connect the device to Wi-Fi using predefined credentials. The necessary files for Wi-Fi configuration are located in the  [directory](/L4S_yocto_files/wifi-connection):
 
@@ -16,6 +24,19 @@ In addition, a Wi-Fi auto-connect script was added to automatically connect the 
 - `wifi-auto.init`: A standard init script to start/stop the Wi-Fi auto-connect process.
 - `wifi-config`: The configuration file containing the Wi-Fi SSID and PSK.
 - `wifi-auto_1.0.bb`: The Yocto recipe for integrating the Wi-Fi files to L4S.
+
+The Wi-Fi auto-connect functionality was integrated into the Yocto system using a custom recipe in the `meta-linux4space layer`. The structure used for integrating the necessary scripts and configuration files follows Yocto's standard layout:
+
+```
+meta-linux4space
+└── recipes-connectivity
+    └── wifi-auto
+        ├── files
+        │   ├── wifi-auto.sh
+        │   ├── wifi-auto.init
+        │   └── wifi-config
+        └── wifi-auto_1.0.bb
+```
 
 ## Docker-Based Yocto Build Environment
 A Docker container based on Ubuntu 20.04 was used to build the Linux4Space distribution to ensure consistency and avoid host-related issues. The setup is defined in the [Dockerfile](/L4S_yocto_files/Dockerfile), which installs all required dependencies and prepares the environment for Yocto builds.
