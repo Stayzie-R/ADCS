@@ -36,44 +36,47 @@ Insert the SD card into the BBB. While plugging in the power, hold the BOOT butt
 
 To permanently install the system to internal storage:
 
-**4.1 Decompress the image**  
-Run the following command to decompress the `.wic.xz` file:
-```bash
-xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
-```
+> **4.1 Decompress the image**  
+> Run the following command to decompress the `.wic.xz` file:
+> ```bash
+> xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
+> ```
 
-**4.2 Copy the `.wic` file**  
-Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
+> **4.2 Copy the `.wic` file**  
+> Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
 
-**4.3 Check the connected devices**  
-Run `blkid` to list the connected devices:
-```bash
-blkid
-```
+> **4.3 Check the connected devices**  
+> Run `blkid` to list the connected devices:
+> ```bash
+> blkid
+> ```
 
-**4.4 Mount the device on BBB**  
-Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
-```bash
-mkdir /mnt/sd
-mount /dev/sda1 /mnt/sd
-```
+> **4.4 Mount the device on BBB**  
+> Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
+> ```bash
+> mkdir /mnt/sd
+> mount /dev/sda1 /mnt/sd
+> ```
 
-**4.5 Write the image to eMMC**  
-Use `dd` to write the image to eMMC:
-```bash
-dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
-```
+> **4.5 Write the image to eMMC**  
+> Use `dd` to write the image to eMMC:
+> ```bash
+> dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
+> ```
 
 > **4.6 Update the bootloader configuration**  
+
 > - Create a mount point and mount the boot partition:
 >     ```bash
 >     mkdir /mnt/boot
 >     mount /dev/mmcblk1p1 /mnt/boot
 >     ```
+
 > - Edit the `extlinux.conf` file:
 >     ```bash
 >     nano /mnt/boot/extlinux/extlinux.conf
 >     ```
+
 > - Set the `APPEND` line to:
 >     ```bash
 >     APPEND root=/dev/mmcblk1p2 rootwait rw ...
