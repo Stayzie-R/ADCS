@@ -38,36 +38,36 @@ Insert the SD card into the BBB. While plugging in the power, hold the BOOT butt
 
 To permanently install the system to internal storage:
 
-&emsp;&emsp;**4.1 Decompress the image**  
-&emsp;&emsp;Run the following command to decompress the `.wic.xz` file: 
+**4.1 Decompress the image**  
+Run the following command to decompress the `.wic.xz` file: 
 ```bash
 xz -d -k l4s-adcs-image-beaglebone.rootfs.wic.xz
 ```
 
-&emsp;&emsp;**4.2 Copy the `.wic` file**  
-&emsp;&emsp;Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
+**4.2 Copy the `.wic` file**  
+Copy the decompressed `.wic` file to a second SD card (or USB drive) connected via a **USB hub**.
 
 
-&emsp;&emsp;**4.3 Check the connected devices**  
-&emsp;&emsp;Run `blkid` to list the connected devices:
+**4.3 Check the connected devices**  
+Run `blkid` to list the connected devices:
 ```bash
 blkid
 ```
 
-&emsp;&emsp;**4.4 Mount the device on BBB**  
-&emsp;&emsp;Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
+**4.4 Mount the device on BBB**  
+Mount the device that contains the `.wic` image. Note that `/dev/sda1` might vary based on the output of `blkid`:
 ```bash
 mkdir /mnt/sd
 mount /dev/sda1 /mnt/sd
 ```
 
-&emsp;&emsp;**4.5 Write the image to eMMC**  
-&emsp;&emsp;Use `dd` to write the image to eMMC:
+**4.5 Write the image to eMMC**  
+Use `dd` to write the image to eMMC:
 ```bash
 dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
 ```
 
-&emsp;&emsp;**4.6 Update the bootloader configuration**
+**4.6 Update the bootloader configuration**
 - Create a mount point and mount the boot partition: 
 ```bash
    mkdir /mnt/boot
@@ -84,8 +84,8 @@ dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
    APPEND root=/dev/mmcblk1p2 rootwait rw ...
   ```
 
-&emsp;&emsp;**4.7 Shutdown the device**  
-&emsp;&emsp;Shutdown the device and **remove all microSD cards**.
+**4.7 Shutdown the device**  
+Shutdown the device and **remove all microSD cards**.
 
 
 
