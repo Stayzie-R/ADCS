@@ -64,20 +64,19 @@ The **ADCS** application can be run independently on the BeagleBone Black Wirele
 
 This lightweight approach is ideal for experimenting with sensor behavior, testing algorithms, or extending the application with new components.
 
-<div style="margin-left: 40px;">
-1. Clone the repository to the BBB:
-```
-git clone https://github.com/Stayzie-R/ADCS.git
-cd ADCS
-```
-2. Install dependencies (if any):
-```
-pip3 install -r requirements.txt
-```
-3. Run the main application:
-```
-python3 adcs.py
-```
+<div align="left">
+  <ol style="margin-left: 40px;">
+    <li>Clone the repository to the BBB:
+      <pre><code>git clone https://github.com/Stayzie-R/ADCS.git
+cd ADCS</code></pre>
+    </li>
+    <li>Install dependencies (if any):
+      <pre><code>pip3 install -r requirements.txt</code></pre>
+    </li>
+    <li>Run the main application:
+      <pre><code>python3 adcs.py</code></pre>
+    </li>
+  </ol>
 </div>
 
 ## Light Vector Calculation
