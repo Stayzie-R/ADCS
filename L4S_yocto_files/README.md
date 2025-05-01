@@ -27,9 +27,11 @@ A Docker container based on Ubuntu 20.04 was used to build the Linux4Space distr
 **1. Download the [Image]()** 
 
 **2. Flash to SD Card**
+
 Format the microSD card as FAT32 with an MBR partition table, then use a tool like balenaEtcher to flash the downloaded `l4s-adcs-image-beaglebone.rootfs.wic.xz` file directly onto a microSD card. This card will be used to boot the BBB.
 
 **3. Boot from SD**
+
 Insert the SD card into the BBB. While plugging in the power, hold the BOOT button for ~5 seconds to boot from the card instead of internal memory. The new system should start automatically.
 
 **4. Flash to Internal eMMC (Optional)**
@@ -64,8 +66,7 @@ To permanently install the system to internal storage:
 > dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
 > ```
 
-> **4.6 Update the bootloader configuration**  
-
+> **4.6 Update the bootloader configuration**
 > - Create a mount point and mount the boot partition:
 >     ```bash
 >     mkdir /mnt/boot
@@ -79,6 +80,7 @@ To permanently install the system to internal storage:
 >     ```bash
 >     APPEND root=/dev/mmcblk1p2 rootwait rw ...
 >    ```
+
 > **4.7 Shutdown the device**  
 > Shutdown the device and **remove all microSD cards**.
 
