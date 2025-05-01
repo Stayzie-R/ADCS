@@ -35,21 +35,26 @@ A sixth PCB, located at the bottom of the cube, serves as a central hub for powe
 ### Pin Connections to BeagleBone Black
 Each photoresistor is connected to the analog inputs of the BeagleBone Black. Specifically, the following pins were used:
 
-<center>
-
-<!-- Markdown table is allowed here, though not ideal -->
-
-| Label        | BBB Header Pin |  Color  |   Vector   |   Function       |
-|:-------------|:--------------:|:-------:|:----------:|:----------------:|
-| AIN0         |     P9_39      | Orange  | (0, 0, 1)  | Vector           |
-| AIN1         |     P9_40      | White   | (1, 0, 0)  | Vector           |
-| AIN2         |     P9_37      | Green   | (0, -1, 0) | Vector           |
-| AIN3         |     P9_38      | Yellow  | (0, 1, 0)  | Vector           |
-| AIN4         |     P9_36      | Brown   | (-1, 0, 0) | Vector           |
-| **VDD_ADC**  |     P9_32      | Blue    | ———        | Power (1.8 V)    |
-| **GND_ADC**  |     P9_34      | Red     | ———        | Ground           |
-
-</center>
+<table style="margin-left:auto; margin-right:auto; text-align:center;">
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>BBB Header Pin</th>
+      <th>Color</th>
+      <th>Vector</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>AIN0</td><td>P9_39</td><td>Orange</td><td>(0, 0, 1)</td><td>Vector</td></tr>
+    <tr><td>AIN1</td><td>P9_40</td><td>White</td><td>(1, 0, 0)</td><td>Vector</td></tr>
+    <tr><td>AIN2</td><td>P9_37</td><td>Green</td><td>(0, -1, 0)</td><td>Vector</td></tr>
+    <tr><td>AIN3</td><td>P9_38</td><td>Yellow</td><td>(0, 1, 0)</td><td>Vector</td></tr>
+    <tr><td>AIN4</td><td>P9_36</td><td>Brown</td><td>(-1, 0, 0)</td><td>Vector</td></tr>
+    <tr><td><strong>VDD_ADC</strong></td><td>P9_32</td><td>Blue</td><td>—</td><td>Power (1.8 V)</td></tr>
+    <tr><td><strong>GND_ADC</strong></td><td>P9_34</td><td>Red</td><td>—</td><td>Ground</td></tr>
+  </tbody>
+</table>
 
 A sixth PCB at the bottom of the cube centralizes power and ground distribution. The VDD and GND pins from the BeagleBone Black are connected to ensure the proper operation of the sensor module.
 
