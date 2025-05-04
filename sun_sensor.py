@@ -105,36 +105,36 @@ class SunSensor:
             for photoresistor in self.photoresistors:
                 photoresistor.read_sensor_value()
 
-    def calc_light_vector(self):
-        """
-        Calculate the light vector based on sensor values.
-        """
-        # Transformation matrix for sensor directions
-        T_matrix = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+def calc_light_vector(self):
+    """
+    Calculate the light vector based on sensor values.
+    """
+    # Transformation matrix for sensor directions
+    T_matrix = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 
-        # Differences between sensor pairs
-        subtract_values = np.zeros(3)
+    # Differences between sensor pairs
+    subtract_values = np.zeros(3)
 
-        max_value = max(sensor.value_raw for sensor in self.photoresistors)
-        if max_value == 0:
-            logger.warning("Cannot calculate light vector: all sensor values are 0.")
-            raise ValueError("Cannot calculate light vector: all sensor values are 0.")
+    max_value = max(sensor.value for sensor in self.photoresistors)
+    if max_value == 0:
+        logger.warning("Cannot calculate light vector: all sensor values are 0.")
+        raise ValueError("Cannot calculate light vector: all sensor values are 0.")
 
-        for i, vector in enumerate(T_matrix):
-            # Find values of corresponding sensors for each direction vector
-            value1, value2 = 0, 0
-            for sensor in self.photoresistors:
-                if sensor.vector == tuple(vector):
-                    value1 = sensor.value_raw
-                elif sensor.vector == tuple(-1 * vector):
-                    value2 = sensor.value_raw
+    for i, vector in enumerate(T_matrix):
+        # Find values of corresponding sensors for each direction vector
+        value1, value2 = 0, 0
+        for sensor in self.photoresistors:
+            if sensor.vector == tuple(vector):
+                value1 = sensor.value
+            elif sensor.vector == tuple(-1 * vector):
+                value2 = sensor.value
 
-            max_value = max(max_value, value1, value2)
-            subtract_values[i] = value1 - value2
+        max_value = max(max_value, value1, value2)
+        subtract_values[i] = value1 - value2
 
-        # Calculate light vector using sensor differences and transformation matrix
-        s = (1 / max_value) * T_matrix.transpose() * subtract_values
-        self.light_vector = np.diagonal(s)
+    # Calculate light vector using sensor differences and transformation matrix
+    s = (1 / max_value) * T_matrix.transpose() @ subtract_values
+    self.light_vector = np.diagonal(s)
 
     def print_sensors_value(self):
         """
@@ -174,7 +174,7 @@ class SunSensor:
         if shutdown:
             self.light_vector = np.array([0.0, 0.0, 0.0])
             for sensor in self.photoresistors:
-                sensor.value_raw = 0.0
+                sensor.value = 0.0
 
             data = {
                 "light_vector": [0.0,0.0,0.0],
