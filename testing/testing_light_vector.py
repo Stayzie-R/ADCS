@@ -1,52 +1,49 @@
 import numpy as np
-import pandas as pd
 import time
 import logging
 import argparse
+import csv
 
-from sun_sensor import SunSensor
+from sun_sensor import SunSensor  # Ensure this module is available
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
-def prepare_reference_dataframe(step_deg: int = 5) -> pd.DataFrame:
+def prepare_reference_data(step_deg: int = 5) -> dict:
     """
-    Create a reference DataFrame containing expected unit vectors for given angle steps.
+    Create a reference dictionary containing expected unit vectors for each angle step.
 
     Args:
-        step_deg: Step size in degrees between angles (default 5).
+        step_deg: Step size in degrees between angles (default is 5).
 
     Returns:
-        DataFrame with columns:
-          - angle_deg
-          - x_expected
-          - y_expected
-          - x_measured (NaN placeholder)
-          - y_measured (NaN placeholder)
+        Dictionary with angle_deg as key and value as:
+        {
+            'expected': (x_expected, y_expected),
+            'measured': None,
+            'error_deg': None
+        }
     """
-    angles = np.arange(0, 360, step_deg)
-    radians = np.radians(angles)
-    df = pd.DataFrame({
-        'angle_deg': angles,
-        'x_expected': np.cos(radians),
-        'y_expected': np.sin(radians),
-        'x_measured': np.nan,
-        'y_measured': np.nan,
-    })
-    return df
+    data = {}
+    for angle in range(0, 360, step_deg):
+        rad = np.radians(angle)
+        expected = (np.cos(rad), np.sin(rad))
+        data[angle] = {'expected': expected, 'measured': None, 'error_deg': None}
+    return data
 
-def measure_light_vector(sensor: SunSensor, count: int = 10, delay: float = 1.0) -> np.ndarray:
+
+def measure_light_vector(sensor: SunSensor, count: int = 10, delay: float = 1.0) -> tuple:
     """
-    Take multiple readings from SunSensor and return normalized average vector.
+    Take multiple readings from the SunSensor and return normalized average vector.
 
     Args:
-        sensor: SunSensor instance (injected for testability).
+        sensor: SunSensor instance.
         count: Number of readings to average.
         delay: Seconds to wait between readings.
 
     Returns:
-        2-element array [x, y] of normalized average measurement,
-        or [nan, nan] if readings failed.
+        Tuple (x, y) of normalized average measurement, or (nan, nan) on failure.
     """
     samples = []
     for _ in range(count):
@@ -57,96 +54,111 @@ def measure_light_vector(sensor: SunSensor, count: int = 10, delay: float = 1.0)
             time.sleep(delay)
         except Exception:
             logger.exception("Error reading light vector from sensor")
+
     if len(samples) < count:
         logger.warning("Expected %d samples but got %d", count, len(samples))
-        return np.array([np.nan, np.nan])
+        return (float('nan'), float('nan'))
+
     arr = np.vstack(samples)
     avg = arr.mean(axis=0)
     norm = np.linalg.norm(avg)
-    return avg / norm if norm > 0 else avg
+    return tuple(avg / norm) if norm > 0 else tuple(avg)
 
-def calc_light_vec(df: pd.DataFrame, sensor: SunSensor) -> pd.DataFrame:
+
+def calc_light_vec(data: dict, sensor: SunSensor) -> dict:
     """
-    Prompt user and perform light measurements for each unmeasured angle.
+    Prompt user to perform light measurements for each unmeasured angle.
 
     Args:
-        df: Reference DataFrame from prepare_reference_dataframe.
-        sensor: SunSensor instance to read measurements.
+        data: Reference dictionary created by prepare_reference_data().
+        sensor: SunSensor instance.
 
     Returns:
-        DataFrame with x_measured and y_measured filled in.
+        Updated dictionary with measured values.
     """
-    for idx, row in df.iterrows():
-        if not np.isnan(row['x_measured']) and not np.isnan(row['y_measured']):
-            logger.info("Angle %s° already measured; skipping.", row['angle_deg'])
+    for angle, vectors in data.items():
+        if vectors['measured'] is not None:
+            logger.info("Angle %s° already measured; skipping.", angle)
             continue
-        logger.info("Ready to measure angle %s°", row['angle_deg'])
+        logger.info("Ready to measure angle %s°", angle)
         input("Press Enter when device is ready for measurement...")
         avg_vec = measure_light_vector(sensor)
-        df.at[idx, 'x_measured'] = avg_vec[0]
-        df.at[idx, 'y_measured'] = avg_vec[1]
-    return df
+        vectors['measured'] = avg_vec
+    return data
 
-def compute_error_rate(df: pd.DataFrame) -> pd.DataFrame:
+
+def compute_error_rate(data: dict) -> dict:
     """
-    Compute angular error (degrees) between expected and measured unit vectors.
+    Compute angular error in degrees between expected and measured unit vectors.
 
     Args:
-        df: DataFrame with columns x_expected, y_expected, x_measured, y_measured.
+        data: Dictionary with expected and measured vectors.
 
     Returns:
-        Same DataFrame with an added 'error_deg' column.
+        Same dictionary with 'error_deg' added for each angle.
 
     Raises:
-        ValueError: if any measured component is NaN.
+        ValueError: If any measured value is missing.
     """
-    if df[['x_measured', 'y_measured']].isna().any().any():
-        raise ValueError("Missing measured vector components; cannot compute error.")
-    dot = (df['x_expected'] * df['x_measured'] +
-           df['y_expected'] * df['y_measured'])
-    mag_exp = np.hypot(df['x_expected'], df['y_expected'])
-    mag_meas = np.hypot(df['x_measured'], df['y_measured'])
-    cos_t = np.clip(dot / (mag_exp * mag_meas), -1.0, 1.0)
-    df['error_deg'] = np.degrees(np.arccos(cos_t))
-    return df
+    for angle, vectors in data.items():
+        if vectors['measured'] is None:
+            raise ValueError(f"Missing measurement for angle {angle}")
 
-def export_to_excel(df: pd.DataFrame, path: str, sheet: str = 'Measurements', include_index: bool = False) -> None:
+        x_exp, y_exp = vectors['expected']
+        x_meas, y_meas = vectors['measured']
+        dot = x_exp * x_meas + y_exp * y_meas
+        mag_exp = np.hypot(x_exp, y_exp)
+        mag_meas = np.hypot(x_meas, y_meas)
+        cos_t = np.clip(dot / (mag_exp * mag_meas), -1.0, 1.0)
+        vectors['error_deg'] = float(np.degrees(np.arccos(cos_t)))
+    return data
+
+def export_to_csv(data: dict, path: str) -> None:
     """
-    Export DataFrame to an Excel file.
-
-    Args:
-        df: DataFrame to export.
-        path: File path for .xlsx output.
-        sheet: Worksheet name (default 'Measurements').
-        include_index: Write row indices if True.
-    """
-    df.to_excel(path, sheet_name=sheet, index=include_index)
-    logger.info("Exported results to Excel: %s (sheet: %s)", path, sheet)
-
-
-def main(
-    step: int,
-    output: str,
-    no_prompt: bool
-) -> None:
-    """
-    Main entry point: generate reference table, measure, compute error, and export.
+    Export results to a CSV file.
 
     Args:
-        step: Degree increment between angles.
-        output: Path to output Excel file.
-        no_prompt: If True, skip all user prompts and measure immediately.
+        data: Dictionary with angle data.
+        path: File path for the .csv output.
     """
-    df = prepare_reference_dataframe(step)
+    with open(path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        # Header row
+        writer.writerow(['angle_deg', 'x_expected', 'y_expected', 'x_measured', 'y_measured', 'error_deg'])
+
+        for angle in sorted(data.keys()):
+            expected = data[angle]['expected']
+            measured = data[angle]['measured'] or (None, None)
+            error = data[angle]['error_deg']
+            writer.writerow([
+                angle,
+                expected[0], expected[1],
+                measured[0], measured[1],
+                error
+            ])
+
+    logger.info("Exported results to CSV: %s", path)
+
+
+
+
+def main(step: int, output: str) -> None:
+    """
+    Main routine: prepare reference vectors, perform measurements, compute error, export results.
+
+    Args:
+        step: Angle increment in degrees.
+        output: Output file path for Excel export.
+    """
+    data = prepare_reference_data(step)
     sensor = SunSensor()
 
-    df = calc_light_vec(df, sensor)
-    df = compute_error_rate(df)
-    export_to_excel(df, output)
+    data = calc_light_vec(data, sensor)
+    data = compute_error_rate(data)
+    export_to_csv(data, output)
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(
         description='Measure sun sensor light vectors and compute error rates.'
     )
