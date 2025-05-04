@@ -4,11 +4,9 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 PR = "r2"
 
-SRC_URI = "file://wifi-auto.sh \
-           file://wifi-auto.init \
-           file://wifi-config"
-
-S = "${WORKDIR}"
+SRC_URI = "git://github.com/Stayzie-R/ADCS.git;protocol=https;branch=main"
+SRCREV = "${AUTOREV}"
+S = "${WORKDIR}/git/L4S_yocto_files/wifi-connection"
 
 inherit update-rc.d
 
@@ -16,14 +14,18 @@ INITSCRIPT_NAME = "wifi-auto"
 INITSCRIPT_PARAMS = "defaults"
 
 do_install() {
-    install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/wifi-auto.sh ${D}${bindir}/wifi-auto
+    etc=${D}${sysconfdir}
+    bin=${D}${bindir}
 
-    install -d ${D}${sysconfdir}/init.d
-    install -m 0755 ${WORKDIR}/wifi-auto.init ${D}${sysconfdir}/init.d/wifi-auto
+    install -d ${bin}
+    install -m 0755 ${WORKDIR}/wifi-auto.sh ${bin}/wifi-auto
 
-    install -d ${D}${sysconfdir}
-    install -m 0600 ${WORKDIR}/wifi-config ${D}${sysconfdir}/wifi-config
+    install -d ${etc}/init.d
+    install -m 0755 ${WORKDIR}/wifi-auto.init ${etc}/init.d/wifi-auto
+
+    install -d ${etc}
+    install -m 0600 ${WORKDIR}/wifi-config ${etc}/wifi-config
 }
 
 FILES:${PN} += "${sysconfdir}/init.d/wifi-auto ${sysconfdir}/wifi-config"
+

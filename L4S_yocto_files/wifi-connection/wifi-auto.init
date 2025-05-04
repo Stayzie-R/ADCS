@@ -4,7 +4,7 @@
 # Required-Start:    $network
 # Required-Stop:
 # Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
+# Default-Stop:
 # Short-Description: WiFi auto-connect script
 ### END INIT INFO
 
@@ -13,15 +13,12 @@ case "$1" in
     echo "Starting wifi-auto..."
     /usr/bin/wifi-auto
     ;;
-  stop)
-    echo "Stopping wifi-auto (not implemented)"
-    ;;
   restart)
     $0 stop
     $0 start
     ;;
   *)
-    echo "Usage: $0 {start|stop|restart}"
+    echo "Usage: $0 {start|restart}"
     exit 1
 esac
 
