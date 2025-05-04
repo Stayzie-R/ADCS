@@ -133,7 +133,7 @@ class SunSensor:
             subtract_values[i] = value1 - value2
 
         # Calculate light vector using sensor differences and transformation matrix
-        s = (1 / max_value) * T_matrix.transpose() @ subtract_values
+        s = (1 / max_value) * T_matrix.transpose() * subtract_values
         self.light_vector = np.diagonal(s)
 
     def print_sensors_value(self):
@@ -141,7 +141,7 @@ class SunSensor:
         Print the values of all sensors.
         """
         for sensor in self.photoresistors:
-            print(sensor.name,"_",sensor.color,": ", sensor.get_norm_value())
+            print("AIN_",sensor.channel,"_", sensor.color,": ", sensor.get_norm_value())
 
     def print_light_vector(self):
         """
