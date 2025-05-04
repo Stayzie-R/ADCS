@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     gawk software-properties-common wget git-core diffstat unzip \
     gcc-multilib build-essential socat sudo passwd libsdl1.2-dev \
-    cpio locales file lz4 zstd git python3 python3-pip nano chr-path \
+    cpio locales file lz4 zstd git python3 python3-pip nano chrpath \
     texinfo
 
 RUN locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8
