@@ -45,7 +45,7 @@ class ADCS:
             ads_thread.join()
             #acs_thread.join()
         except KeyboardInterrupt:
-            print("\nKeyboardInterrupt – ending...")
+            logger.info("KeyboardInterrupt – ending...")
             self.stop_event.set()
 
     def attitude_determination_system(self):
@@ -60,7 +60,7 @@ class ADCS:
             try:
                 sensor.run()
             except Exception as e:
-                print(f"[ERROR] Sensor '{sensor_name}' failed: {e}")
+                logger.error(f"[ERROR] Sensor {sensor_name} failed: {e}")
 
         sensor_threads = {}
         for name, sensor in self.sensors.items():
@@ -75,7 +75,7 @@ class ADCS:
         Attitude Control System (ACS).
 
         This method runs the Attitude Control System (ACS) which is responsible for
-        controlling the orientation of the satellite based on the data obtained from
+        controlling the orientation of the satsellite based on the data obtained from
         the Attitude Determination System (ADS).
         """
         pass
@@ -85,4 +85,4 @@ if __name__ == "__main__":
         app = ADCS()
         app.run()
     except Exception as e:
-        print(f"[FATAL ERROR] ADCS failed: {e}")
+        logger.error(f"[FATAL ERROR] ADCS failed: {e}")
