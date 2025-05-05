@@ -23,7 +23,6 @@ sun_sensor = dict(
     READ_INTERVAL = 1,
     PRINT_RESULT = False,
     SENSORS = [
-
         dict(pin_key="AIN0", color="orange", vector=(0, 0, 1)),
         dict(pin_key="AIN1", color="white", vector=(1, 0, 0)),
         dict(pin_key="AIN2", color="green", vector=(0, -1, 0)),
@@ -40,6 +39,6 @@ plot_app = dict(
 )
 
 logging.basicConfig(
-    level=logging.INFO,  # nebo DEBUG, pokud ladíš
+    level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
