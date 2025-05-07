@@ -27,7 +27,7 @@ def generate_reference_vectors(step_deg: int = 5) -> dict:
             }
     """
     data = {}
-    for angle in range(0, 360, step_deg):
+    for angle in range(0, 180, step_deg):
         rad = np.radians(angle)
         expected = (np.cos(rad), np.sin(rad))
         data[angle] = {'expected': expected, 'measured': None, 'error_deg': None}
