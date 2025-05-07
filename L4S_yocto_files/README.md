@@ -45,7 +45,7 @@ A Docker container based on Ubuntu 20.04 was used to build the Linux4Space distr
 
 ## Running the Image on BeagleBone Black Wireless
 
-#### **1. Download the [Image](L4S_yocto_files/l4s-adcs-image-beaglebone.rootfs.wic.xz)** 
+#### **1. Download the [Image](L4S_yocto_files/l4s-adcs-image-beaglebone.rootfs.wic.xz)** from Git LTS (make sure you have Git LFS installed on your machine)
 
 #### *2. Flash to SD Card**
 
