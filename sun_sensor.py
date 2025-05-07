@@ -176,7 +176,6 @@ class SunSensor:
         sun_vector = np.array([Sx, Sy, Sz]) / norm
         return sun_vector
 
-
     def print_sensors_value(self):
         """
         Print the values of all sensors.
