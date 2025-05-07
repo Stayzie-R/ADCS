@@ -107,9 +107,3 @@ dd if=/mnt/sd/l4s-adcs-image-beaglebone.rootfs.wic of=/dev/mmcblk1 bs=64K
 
 **4.7 Shutdown the device**  
 Shutdown the device and **remove all microSD cards**.
-
-
-
-
-
-
