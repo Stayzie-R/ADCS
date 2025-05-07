@@ -135,9 +135,7 @@ class SunSensor:
         self.light_vector = subtract_values / np.linalg.norm(subtract_values)
         #self.light_vector = np.diagonal(s)
 
-
-
-    def calc_light_vector_2(self):
+    def calc_light_vector_by_max_values(self):
         """
         Calculate the normalized light direction vector (Sun vector)
         using max sensor intensities on each axis.
