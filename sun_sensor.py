@@ -235,7 +235,7 @@ class SunSensor:
                     {
                         "color": sensor.color,
                         "vector": sensor.vector,
-                        "value": sensor.get_norm_value()
+                        "value": sensor.get_value_voltage()
                     }
                     for sensor in self.photoresistors
                 ]

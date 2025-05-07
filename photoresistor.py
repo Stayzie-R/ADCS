@@ -19,7 +19,8 @@ class Photoresistor:
                 self.channel (int): The numerical representation of the channel (extracted from the pin name).
                 self.color (str): The color associated with the pin.
                 self.vector (tuple): Tuple representing the direction vector.
-                self.value_raw (int): The value_raw read from the sensor (default -1).
+                self.voltage (float): Analog voltage converted from the raw ADC value, in volts (V).
+                self.value (float): The normalized value read from the sensor (default -1).
         """
         # Validate the pin name and vector
         PhotoresistorValidator.validate(name, vector, color)
@@ -27,6 +28,7 @@ class Photoresistor:
         self.color = color
         self.vector = vector
         self.value = -1
+        self.value_voltage = -1
         # Extract numerical channel from the pin name (e.g., 'AIN0' -> 0)
         self.channel = int(name[3:])
 
@@ -48,6 +50,7 @@ class Photoresistor:
             with open(adc_file, "r") as f:
                 value_raw = int(f.read().strip())
             self.value = value_raw / 4095.0  # Normalize to a 0-1 range
+            self.value_voltage = self.value * 1.8
             return self.value
 
 
@@ -92,6 +95,15 @@ class Photoresistor:
         """
 
         return self.value
+
+    def get_value_voltage(self):
+        """
+        Returns the analog voltage converted from the raw ADC value.
+
+        Returns:
+            float: Voltage in volts (V), typically in the range 0–1.8 V for BeagleBone Black ADC.
+        """
+        return self.value_voltage
 
 class PhotoresistorValidator:
     """
