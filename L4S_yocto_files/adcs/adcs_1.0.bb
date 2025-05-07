@@ -3,7 +3,7 @@ DESCRIPTION = "Satellite Attitude Determination and Control System with sensors"
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/Proprietary;md5=0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"
 
-SRC_URI = "git://github.com/Stayzie-R/ADCS.git;protocol=https;branch=main"
+SRC_URI = "git://github.com/RosovaAnastazie/ADCS.git;protocol=https;branch=main"
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"

@@ -4,7 +4,7 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/Proprietary;md5=0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f"
 PR = "r2"
 
-SRC_URI = "git://github.com/Stayzie-R/ADCS.git;protocol=https;branch=main"
+SRC_URI = "git://github.com/RosovaAnastazie/ADCS.git;protocol=https;branch=main"
 SRCREV = "${AUTOREV}"
 S = "${WORKDIR}/git/L4S_yocto_files/wifi-connection"
 
