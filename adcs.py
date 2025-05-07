@@ -60,7 +60,7 @@ class ADCS:
             try:
                 sensor.run()
             except Exception as e:
-                logger.error(f"[ERROR] Sensor {sensor_name} failed: {e}")
+                logger.error("[ERROR] Sensor ",sensor_name," failed: ",e)
 
         sensor_threads = {}
         for name, sensor in self.sensors.items():
@@ -85,4 +85,4 @@ if __name__ == "__main__":
         app = ADCS()
         app.run()
     except Exception as e:
-        logger.error(f"[FATAL ERROR] ADCS failed: {e}")
+        logger.error("[FATAL ERROR] ADCS failed: ",e)
