@@ -129,8 +129,6 @@ class SunSensor:
 
             subtract_values[i] = value_pos - value_neg
 
-            print("vector: ", vector, " ==== (",value_pos, " - ", value_neg,") =" , value_pos - value_neg)
-
 
         self.light_vector = subtract_values / np.linalg.norm(subtract_values)
         #self.light_vector = np.diagonal(s)

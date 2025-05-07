@@ -21,7 +21,7 @@ photoresistor = dict(
 # Configuration for the Sun Sensor application
 sun_sensor = dict(
     READ_INTERVAL = 1,
-    PRINT_RESULT = False,
+    PRINT_RESULT = True,
     SENSORS = [
         dict(pin_key="AIN2", color="orange", vector=(0, 0, 1)),
         dict(pin_key="AIN0", color="white", vector=(1, 0, 0)),
