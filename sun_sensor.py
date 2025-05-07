@@ -109,10 +109,8 @@ class SunSensor:
         """
         Calculate the light vector based on sensor values.
         """
-        # Transformation matrix for sensor directions
         T_matrix = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
 
-        # Differences between sensor pairs
         subtract_values = np.zeros(3)
 
         max_value = max(sensor.value for sensor in self.photoresistors)
@@ -121,20 +119,67 @@ class SunSensor:
             raise ValueError("Cannot calculate light vector: all sensor values are 0.")
 
         for i, vector in enumerate(T_matrix):
-            # Find values of corresponding sensors for each direction vector
-            value1, value2 = 0, 0
+            value_pos = 0
+            value_neg = 0
             for sensor in self.photoresistors:
-                if sensor.vector == tuple(vector):
-                    value1 = sensor.value
-                elif sensor.vector == tuple(-1 * vector):
-                    value2 = sensor.value
+                if np.allclose(sensor.vector, vector):
+                    value_pos = sensor.value
+                elif np.allclose(sensor.vector, -1 * vector):
+                    value_neg = sensor.value
 
-            max_value = max(max_value, value1, value2)
-            subtract_values[i] = value1 - value2
+            subtract_values[i] = value_pos - value_neg
 
-        # Calculate light vector using sensor differences and transformation matrix
-        s = (1 / max_value) * T_matrix.transpose() * subtract_values
-        self.light_vector = np.diagonal(s)
+            print("vector: ", vector, " ==== (",value_pos, " - ", value_neg,") =" , value_pos - value_neg)
+
+
+        self.light_vector = subtract_values / np.linalg.norm(subtract_values)
+        #self.light_vector = np.diagonal(s)
+
+
+
+    def calc_light_vector_2(self):
+        """
+        Calculate the normalized light direction vector (Sun vector)
+        using max sensor intensities on each axis.
+
+
+        Returns:
+            np.array of shape (3,), normalized light vector in satellite body frame.
+        """
+        # Initialize intensity for each axis direction
+        Ix_pos = Ix_neg = Iy_pos = Iy_neg = Iz_pos = Iz_neg = 0.0
+
+        for sensor in self.photoresistors:
+            v = np.array(sensor.vector)
+            val = sensor.value
+            if np.allclose(v, [1, 0, 0]):
+                Ix_pos = val
+            elif np.allclose(v, [-1, 0, 0]):
+                Ix_neg = val
+            elif np.allclose(v, [0, 1, 0]):
+                Iy_pos = val
+            elif np.allclose(v, [0, -1, 0]):
+                Iy_neg = val
+            elif np.allclose(v, [0, 0, 1]):
+                Iz_pos = val
+            elif np.allclose(v, [0, 0, -1]):
+                Iz_neg = val
+
+        Ia = max(Ix_pos, Ix_neg)
+        Ib = max(Iy_pos, Iy_neg)
+        Ic = max(Iz_pos, Iz_neg)
+
+        Sx = Ia if Ix_pos >= Ix_neg else -Ia
+        Sy = Ib if Iy_pos >= Iy_neg else -Ib
+        Sz = Ic if Iz_pos >= Iz_neg else -Ic
+
+        norm = np.sqrt(Sx ** 2 + Sy ** 2 + Sz ** 2)
+        if norm == 0:
+            raise ValueError("All sensor readings are zero; cannot determine light vector.")
+
+        sun_vector = np.array([Sx, Sy, Sz]) / norm
+        return sun_vector
+
 
     def print_sensors_value(self):
         """
