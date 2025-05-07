@@ -5,7 +5,7 @@ import argparse
 import csv
 import os
 
-from sun_sensor import SunSensor  # Make sure this module is available
+from sun_sensor import SunSensor
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -197,7 +197,7 @@ def main(step: int, output: str) -> None:
     logger.info("Starting measurement routine with step %d°", step)
     reference_data = generate_reference_vectors(step)
     existing_data = read_existing_csv(output)
-    reference_data.update(existing_data)  # Overwrite only previously recorded angles
+    reference_data.update(existing_data)
 
     sensor = SunSensor()
     updated_data = perform_vector_measurement(reference_data, sensor, output)
